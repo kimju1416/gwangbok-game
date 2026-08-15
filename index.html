@@ -213,6 +213,8 @@ img{display:block;max-width:100%}
 
 @media (max-width:430px){
   .wrap{padding:12px 13px 30px}
+  /* 찾기 그림은 화면 폭 끝까지 — 작은 화면에서 조금이라도 크게 */
+  .scene{margin:0 -13px;width:calc(100% + 26px);border-radius:0;border-left:0;border-right:0}
   .cards{grid-template-columns:1fr}
   .badges{grid-template-columns:repeat(2,1fr)}
   .pc{min-width:74px;padding:12px;font-size:15px}
@@ -542,8 +544,7 @@ function viewFind(){
         return `<span class="chip${got?" on":""}">${got?"✓ "+esc(s.label):"? 아직"}</span>`;
       }).join("")}
     </div>`,
-    `<div style="flex:1;min-height:12px"></div>
-     <button class="btn sub" id="hint">힌트 보기 (−10점)</button>`);
+    `<button class="btn sub" id="hint" style="margin-top:14px">힌트 보기 (−10점)</button>`);
   afterHud();
   const scene = document.getElementById("scene");
 
