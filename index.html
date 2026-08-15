@@ -312,8 +312,9 @@ const CH = [
   ],
   title:"영이네 집에서 달라진 곳을 찾아라",
   ask:"일본이 들여놓은 것과, 우리 집에서 빼앗아 가는 것을 찾아보세요. 모두 다섯 군데예요.",
-  img:IMG+"home2-before.jpg", after:IMG+"home2-after.jpg",
-  done:"영이네 집을 되찾았어요",
+  img:IMG+"home2-before.jpg",
+  /* 되찾은 집 그림(home2-after)은 아직 1941년이라 여기 쓰지 않는다 — 7장 광복 뒤에 나온다 */
+  done:"영이네 집이 어떻게 달라졌는지 모두 알았어요",
   rule:"일본은 우리 국기, 우리 옷, 우리 물건까지 바꾸고 빼앗아 갔어요.",
   spots:[
     { id:"flag",  label:"일본 국기", x:4,  y:2,  w:19, h:23, yr:"1910년부터",
@@ -382,6 +383,7 @@ const CH = [
 
 /* 6 */ { id:"raise", year:"오늘", music:"joy", kind:"raise",
   pages:[
+    { img:IMG+"home2-after.jpg", lines:["영이네 집도 다시 <em>우리 집</em>이 되었어요.","일본 국기가 걸렸던 자리에는 태극기가,","일본 옷이 있던 자리에는 한복이 걸렸지요."] },
     { img:IMG+"scene-today.jpg", lines:["오늘도 <em>8월 15일</em>이 되면 집집마다 태극기를 답니다.","나라를 되찾은 날을 기억하기 위해서예요.","우리가 만든 태극기를 높이 올려요."] },
   ],
   title:"태극기를 답니다",
@@ -563,7 +565,7 @@ function viewCover(){
     <img class="cover-bg tall" src="${IMG}cover-tall.jpg" alt="" />
     <img class="cover-bg wide" src="${IMG}story-cover.jpg" alt="" />
     <div class="cover-in">
-      <span class="tag">초등 1~2학년 · 8월 15일 광복절</span>
+      <span class="tag">8월 15일 광복절</span>
       <h1>영이의 광복절</h1>
       <p>1910년부터 1945년까지,<br><b style="color:var(--amber)">35년</b>의 이야기를 따라가 봐요.</p>
       <button class="btn" id="go">이야기 시작하기 →</button>
