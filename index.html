@@ -675,7 +675,7 @@ function viewFind(){
       <span class="yr">${esc(s.yr)}</span>
       <h3>${esc(s.label)}</h3>
       <p class="lead">${esc(s.why)}</p>
-      ${last ? `<div class="pic" style="margin-bottom:14px"><img src="${c.after}" alt=""></div>
+      ${last ? `${c.after ? `<div class="pic" style="margin-bottom:14px"><img src="${c.after}" alt=""></div>` : ""}
         <h3>${esc(c.done)}</h3>
         <div class="rule"><i>✓</i><p>${esc(c.rule)}</p></div>` : ""}
       <button class="btn" id="ok">${last ? "다음 이야기 →" : "알겠어요"}</button></div>`;
