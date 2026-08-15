@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gwangbok",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8879", "--directory", "C:/Users/USER/Downloads/프로젝트/gwangbok-game"],
+      "port": 8879
+    }
+  ]
+}
