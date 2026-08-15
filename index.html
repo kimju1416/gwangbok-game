@@ -52,8 +52,20 @@ img{display:block;max-width:100%}
 /* 표지 */
 .cover{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;min-height:100svh}
 .cover-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* 세로 화면에서는 세로 표지를 쓰고, 그림은 위쪽 2/3에만 둔다.
+   그림을 화면 전체에 깔면 아래쪽 인물과 태극기가 글자에 가려진다. */
+.cover-bg.tall{display:none}
 .cover::after{content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(19,26,46,.12) 0%,rgba(19,26,46,.8) 50%,rgba(19,26,46,.98) 80%)}
+/* 이 블록은 반드시 위 .cover::after 규칙 '뒤'에 와야 한다.
+   앞에 두면 특정성이 같아 나중에 오는 inset:0 이 이겨서 height가 무시되고,
+   그라데이션이 화면 전체에 걸려 인물과 태극기가 어둡게 묻힌다. */
+@media (max-aspect-ratio:1/1){
+  .cover-bg.tall{display:block;inset:auto;top:0;left:0;height:70%;object-position:center top}
+  .cover-bg.wide{display:none}
+  .cover::after{top:0;bottom:auto;height:70%;
+    background:linear-gradient(180deg,rgba(19,26,46,0) 0%,rgba(19,26,46,0) 76%,rgba(19,26,46,.4) 90%,var(--bg) 100%)}
+}
 .cover-in{position:relative;z-index:2;width:100%;max-width:720px;margin:0 auto;padding:0 18px 30px;text-align:center}
 .tag{display:inline-block;padding:5px 12px;border-radius:99px;background:rgba(232,80,58,.92);color:#fff;
   font-size:13px;font-weight:800;margin-bottom:12px}
@@ -144,7 +156,7 @@ p.ask{margin:6px 0 12px;font-size:15px;color:var(--tx2);line-height:1.6}
 .cheer{position:relative;border-radius:var(--r-c);overflow:hidden;border:1px solid var(--bd);
   aspect-ratio:1400/933;cursor:pointer;background:#0E1628}
 .cheer>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.cheer .veil{position:absolute;inset:0;background:rgba(10,16,32,.62);transition:background .3s}
+.cheer .veil{position:absolute;inset:0;background:rgba(10,16,32,.28);transition:background .3s}
 .fly{position:absolute;width:38px;height:26px;pointer-events:none;animation:fly 1.5s ease-out forwards}
 @keyframes fly{0%{transform:translateY(0) scale(.6);opacity:1}100%{transform:translateY(-150px) scale(1.15);opacity:0}}
 .mansae{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:clamp(30px,9vw,52px);
@@ -216,6 +228,11 @@ p.ask{margin:6px 0 12px;font-size:15px;color:var(--tx2);line-height:1.6}
 /* 엔딩 */
 .end h2{margin:0 0 8px;font-size:clamp(27px,7vw,38px);line-height:1.2;letter-spacing:-.04em;text-align:center}
 .end .sub{margin:0 0 18px;text-align:center;font-size:16px;line-height:1.8;color:var(--tx2)}
+.thanks{margin:0 0 18px;padding:20px 18px;border:2px solid var(--amber);border-radius:var(--r-c);
+  background:linear-gradient(160deg,rgba(240,180,41,.14),rgba(240,180,41,.05));text-align:center}
+.thanks p{margin:0 0 12px;font-size:clamp(16px,4.2vw,18px);line-height:1.85;color:rgba(255,255,255,.94)}
+.thanks p.last{margin:0;padding-top:12px;border-top:1px solid rgba(240,180,41,.28);font-weight:800}
+.thanks b{color:var(--amber)}
 .recap{border:1px solid var(--bd);border-radius:var(--r-c);background:var(--bg2);padding:16px;margin-bottom:16px}
 .recap div{display:flex;gap:11px;align-items:flex-start;padding:9px 0}
 .recap div+div{border-top:1px solid rgba(255,255,255,.06)}
@@ -279,34 +296,36 @@ const PEOPLE = [
 
 /* ---------- 장(챕터) ---------- */
 const CH = [
-/* 0 */ { id:"open", year:"1910", music:"story", kind:"years",
+/* 0 */ { id:"open", year:"1910년", music:"story", kind:"years",
   pages:[
     { img:IMG+"story-peace.jpg", lines:["아주 오래전, 우리 마을에는 웃음소리가 가득했어요.","사람들은 우리말로 이야기하고, 우리 이름으로 서로를 불렀어요."] },
-    { img:IMG+"scene3-before.jpg", lines:["그런데 <em>1910년</em>, 일본이 힘으로 우리나라를 빼앗아 갔어요.","거리에는 일본 깃발이 걸리고, 마을은 조용해졌어요."] },
+    { img:IMG+"scene3-before.jpg", lines:["그런데 <em>1910년</em>, 일본이 힘으로 우리나라를 빼앗아 갔어요.","거리에는 일본 국기가 걸리고, 마을은 조용해졌어요."] },
   ],
   title:"그날부터 몇 년이 흘렀을까요?",
-  ask:"아래 버튼을 눌러 세월을 넘겨 보세요." },
+  ask:"아래 버튼을 눌러 세월을 넘겨 보세요.",
+  done:"1910년부터 1945년까지, 35년이 흘렀어요",
+  rule:"우리나라는 35년 동안 일본에게 나라를 빼앗겼어요." },
 
-/* 1 */ { id:"home", year:"1941", music:"calm", kind:"find",
+/* 1 */ { id:"home", year:"1941년", music:"calm", kind:"find",
   pages:[
-    { img:IMG+"scene1-before.jpg", lines:["여기는 <em>영이네 집</em>이에요.","영이는 여러분과 같은 초등학생이었어요.","그런데 집이 예전과 달라졌어요."] },
+    { img:IMG+"home2-before.jpg", lines:["여기는 <em>영이네 집</em>이에요.","영이는 여러분과 같은 초등학생이었어요.","그런데 집에 <em>일본 것</em>이 하나둘 들어오고,","우리 물건은 하나둘 빼앗겨 갔어요."] },
   ],
-  title:"영이네 집에서 달라진 것을 찾아라",
-  ask:"이상한 곳 다섯 군데를 눌러 보세요.",
-  img:IMG+"scene1-before.jpg", after:IMG+"scene1-after.jpg",
-  done:"영이네 집에서 빼앗긴 것을 모두 찾았어요",
-  rule:"일본은 우리 이름, 우리 물건, 우리 옷까지 빼앗아 갔어요.",
+  title:"영이네 집에서 달라진 곳을 찾아라",
+  ask:"일본이 들여놓은 것과, 우리 집에서 빼앗아 가는 것을 찾아보세요. 모두 다섯 군데예요.",
+  img:IMG+"home2-before.jpg", after:IMG+"home2-after.jpg",
+  done:"영이네 집을 되찾았어요",
+  rule:"일본은 우리 국기, 우리 옷, 우리 물건까지 바꾸고 빼앗아 갔어요.",
   spots:[
-    { id:"flag",  label:"일본 깃발", x:4,  y:5,  w:19, h:22, yr:"1910년~",
-      why:"태극기 대신 일본 깃발을 걸게 했어요. 우리 국기를 꺼내면 큰일이 났지요." },
-    { id:"name",  label:"바뀐 문패", x:3,  y:34, w:15, h:26, yr:"1940년",
-      why:"우리 성과 이름을 못 쓰게 하고, 일본식 이름으로 바꾸라고 했어요. 이것을 ‘창씨개명’이라고 해요." },
-    { id:"tag",   label:"일본 이름표", x:48, y:48, w:16, h:19, yr:"1940년",
-      why:"영이도 학교에서 일본 이름으로 불렸어요. 내 이름을 부르지 못하는 건 아주 슬픈 일이에요." },
-    { id:"brass", label:"빼앗긴 놋그릇", x:63, y:68, w:28, h:23, yr:"1941년",
-      why:"전쟁에 쓸 총알을 만들려고 쇠붙이를 모두 걷어 갔어요. 밥그릇과 숟가락, 학교 교문까지 가져갔답니다." },
-    { id:"cloth", label:"못 입는 한복", x:79, y:42, w:17, h:17, yr:"1940년대",
-      why:"우리 옷을 입는 것도 눈치를 봐야 했어요." },
+    { id:"flag",  label:"일본 국기", x:4,  y:2,  w:19, h:23, yr:"1910년부터",
+      why:"태극기 대신 일본 국기를 걸게 했어요. 우리 태극기를 꺼내면 큰일이 났지요." },
+    { id:"kimono", label:"일본 옷(기모노)", x:81, y:22, w:17, h:39, yr:"1940년 무렵",
+      why:"우리 옷인 한복 대신 일본 옷을 입으라고 했어요." },
+    { id:"geta",  label:"일본 신발(게다)", x:43, y:64, w:17, h:16, yr:"1940년 무렵",
+      why:"신발까지 일본 것을 신게 했어요. 우리 신발은 하얀 고무신이랍니다." },
+    { id:"brass", label:"수레에 실려 나가는 놋그릇", x:57, y:68, w:33, h:27, yr:"1941년",
+      why:"놋그릇은 우리 물건이에요. 그런데 일본이 전쟁에 쓸 총알을 만들려고 쇠붙이를 걷어 갔어요. 밥그릇과 숟가락, 학교 교문까지 수레에 실어 갔답니다." },
+    { id:"charm", label:"일본 신을 모시는 부적", x:2, y:35, w:14, h:23, yr:"1930년대 후반",
+      why:"일본은 우리에게 일본 신을 믿으라고 시켰어요. 이것을 ‘신사참배’라고 해요." },
   ] },
 
 /* 2 */ { id:"school", year:"1938", music:"calm", kind:"pick",
@@ -322,8 +341,8 @@ const CH = [
       why:"1940년부터 일본식 이름을 쓰게 했지만, 영이의 진짜 이름은 ‘김영이’예요." },
     { q:"우리글로 쓴 것은 어느 쪽일까요?", opts:[{t:"학교"},{t:"がっこう"}], answer:0,
       why:"한글은 세종대왕이 만든 우리 글자예요." },
-    { q:"우리나라 국기는 어느 쪽일까요?", opts:[{svg:"taegeuk"},{svg:"hinomaru"}], answer:0,
-      why:"우리나라 국기는 태극기예요. 오른쪽은 일본 국기랍니다." },
+    { q:"우리나라 국기는 어느 것일까요?", opts:[{svg:"taegeuk"},{svg:"hinomaru"}], answer:0,
+      why:"우리나라 국기는 태극기예요. 다른 하나는 일본 국기랍니다." },
   ] },
 
 /* 3 */ { id:"people", year:"1919", music:"story", kind:"people",
@@ -337,7 +356,7 @@ const CH = [
 
 /* 4 */ { id:"day", year:"1945", music:"joy", kind:"cheer",
   pages:[
-    { img:IMG+"scene5-before.jpg", lines:["그리고 마침내 그날이 왔어요.","<em>1945년 8월 15일</em> 낮, 라디오에서 전쟁이 끝났다는 소식이 흘러나왔어요.","나라를 빼앗긴 지 <em>35년</em> 만이었어요."] },
+    { img:IMG+"scene5-before.jpg", lines:["그리고 마침내 그날이 왔어요.","<em>1945년 8월 15일</em> 낮 열두 시, 라디오가 있는 집 앞에 사람들이 모였어요.","그때는 라디오가 아주 귀해서, 소식은 입에서 입으로 퍼져 나갔어요.","나라를 빼앗긴 지 <em>35년</em> 만이었어요."] },
   ],
   title:"함께 만세를 불러요",
   ask:"화면을 눌러 보세요. 사람들이 거리로 나옵니다.",
@@ -541,7 +560,8 @@ function render(){
 
 function viewCover(){
   app.innerHTML = `<section class="cover">
-    <img class="cover-bg" src="${IMG}story-cover.jpg" alt="" />
+    <img class="cover-bg tall" src="${IMG}cover-tall.jpg" alt="" />
+    <img class="cover-bg wide" src="${IMG}story-cover.jpg" alt="" />
     <div class="cover-in">
       <span class="tag">초등 1~2학년 · 8월 15일 광복절</span>
       <h1>영이의 광복절</h1>
@@ -582,7 +602,7 @@ function viewStory(){
 function viewYears(){
   app.innerHTML = shell(`
     <div class="years">
-      <div class="ynum" id="yn">1910</div>
+      <div class="ynum" id="yn">1910년</div>
       <div class="ycap" id="yc">나라를 빼앗긴 해예요</div>
       <div class="ybar"><i id="yb"></i></div>
       <div class="ybig" id="ybig">35년 동안이었어요</div>
@@ -599,7 +619,7 @@ function viewYears(){
     let y = 1910;
     const step = () => {
       y++;
-      yn.textContent = y;
+      yn.textContent = y + "년";
       yb.style.width = ((y-1910)/35*100) + "%";
       if (NOTE[y]) { yc.textContent = NOTE[y]; sfx("year"); }
       else if (y % 5 === 0) sfx("year");
@@ -644,18 +664,23 @@ function viewFind(){
     const s = c.spots.find(x=>x.id===id);
     S.got.push(id); S.score += 20; sfx("ok");
     render();
-    /* 찾을 때마다 '왜 빼앗겼는지' 알려 준다 — 이게 이 게임의 핵심이다 */
+    /* 찾을 때마다 '왜 빼앗겼는지' 알려 준다 — 이게 이 장의 핵심이다.
+       마지막 하나를 찾으면 설명과 마무리를 한 장에 합쳐서 시트가 두 번 뜨지 않게 한다. */
+    const last = S.got.length === c.spots.length;
     const el = document.createElement("div");
     el.className = "sheet";
     el.innerHTML = `<div class="sheet-in">
       <span class="yr">${esc(s.yr)}</span>
       <h3>${esc(s.label)}</h3>
       <p class="lead">${esc(s.why)}</p>
-      <button class="btn" id="ok">알겠어요</button></div>`;
+      ${last ? `<div class="pic" style="margin-bottom:14px"><img src="${c.after}" alt=""></div>
+        <h3>${esc(c.done)}</h3>
+        <div class="rule"><i>✓</i><p>${esc(c.rule)}</p></div>` : ""}
+      <button class="btn" id="ok">${last ? "다음 이야기 →" : "알겠어요"}</button></div>`;
     document.body.appendChild(el);
     el.querySelector("#ok").onclick = () => {
       el.remove(); sfx("tap");
-      if (S.got.length === c.spots.length) finishChapter();
+      if (last) { sfx("win"); S.ch++; S.view="story"; S.page=0; S.got=[]; S.sub=0; S.sel=null; render(); }
     };
   });
   scene.onclick = e => {
@@ -780,7 +805,7 @@ function viewPeople(){
 
 /* 4장 — 만세 */
 function viewCheer(){
-  const c = ch(), need = 10;
+  const c = ch(), need = 30;
   app.innerHTML = shell(`
     <div class="cheer" id="cheer">
       <img src="${esc(c.img)}" alt="" />
@@ -793,7 +818,7 @@ function viewCheer(){
   box.onclick = e => {
     if (S.cheer >= need) return;
     S.cheer++;
-    veil.style.background = `rgba(10,16,32,${Math.max(0, .62 - S.cheer*.062)})`;
+    veil.style.background = `rgba(10,16,32,${Math.max(0, .28 - S.cheer*.0094)})`;
     const r = box.getBoundingClientRect();
     const f = document.createElement("div");
     f.className = "fly";
@@ -918,10 +943,15 @@ function viewRaise(){
 /* ---------- 엔딩 ---------- */
 function viewEnd(){
   app.innerHTML = `<div class="wrap end">
-    <div class="pic" style="margin-bottom:16px"><img src="${IMG}scene-today.jpg" alt="" /></div>
+    <div class="pic" style="margin-bottom:16px"><img src="${IMG}ending-yeongi.jpg" alt="" /></div>
     <h2>오늘은 광복절입니다</h2>
     <p class="sub"><b style="color:var(--amber)">광복</b>은 “빛을 되찾다”라는 뜻이에요.<br>
       1945년 8월 15일, 우리나라는 35년 만에 나라를 되찾았어요.</p>
+    <div class="thanks">
+      <p>오늘 우리가 <b>우리말</b>로 이야기하고,<br><b>우리 이름</b>으로 불리는 것은<br>
+      그때 나라를 되찾으려 애쓴 분들 덕분이에요.</p>
+      <p class="last">그분들을 잊지 않고 <b>기억하는 것</b>,<br>그것이 우리가 할 수 있는 가장 큰 고맙다는 인사예요.</p>
+    </div>
     <div class="recap">
       <div><b>1910년</b><span>일본에게 나라를 빼앗겼어요</span></div>
       <div><b>1919년</b><span>3·1운동 — 온 나라가 “대한 독립 만세”를 외쳤어요</span></div>
